@@ -94,7 +94,6 @@ namespace epam_home_task
             IWebElement allLocationsOption = dropDownMenu.FindElement(By.CssSelector(allLocationsOptionLocator));
             allLocationsOption.Click();
 
-            //var condition1 = wait.Until(d => d.FindElement(By.CssSelector(remoteCheckboxLocator)).Displayed);
             WaitDisplayed(wait, By.CssSelector(remoteCheckboxLocator));
             IWebElement remoteCheckbox = driver.FindElement(By.CssSelector(remoteCheckboxLocator));
             IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
