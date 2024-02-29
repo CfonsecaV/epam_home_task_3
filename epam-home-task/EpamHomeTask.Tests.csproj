@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>epam_home_task</RootNamespace>
+    <RootNamespace>EpamHomeTask.Tests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -17,6 +17,10 @@
     <PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.18.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EpamHomeTask.Pages\EpamHomeTask.Pages.csproj" />
   </ItemGroup>
 
 </Project>
