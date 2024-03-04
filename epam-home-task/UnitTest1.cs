@@ -3,6 +3,9 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using EpamHomeTask.Pages;
+using OpenQA.Selenium.Internal;
+using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 
 namespace EpamHomeTask.Tests
 {
@@ -10,14 +13,20 @@ namespace EpamHomeTask.Tests
     {
         private IWebDriver driver;
         private string pageSource;
-        
+
         [SetUp]
         public void Setup()
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
             driver = new ChromeDriver(options);
-            driver.Navigate().GoToUrl("https://www.epam.com/");
+            var configBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("AppSettings.json");
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            var configuration = configBuilder.Build();
+            string baseUrl = configuration["BaseUrl"] ?? string.Empty;
+            driver.Navigate().GoToUrl(baseUrl);
 
         }
 
@@ -31,48 +40,69 @@ namespace EpamHomeTask.Tests
         [TestCase("C#", "All Locations")]
         [TestCase("Java", "All Locations")]
         [TestCase("Python", "All Locations")]
-        public void ValidateCriteriaBasedPositionSearch(string programmingLanguage, string location)
+        public void PageContainsInputProgrammingLanguage_DoesContainIt_Pass(string programmingLanguage, string location)
         {
-            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(10));
             HomePage homePage = new(driver);
 
-            homePage.AcceptCookies(wait);
+            homePage.AcceptCookies();
             CareersSearchPage careersSearchPage = homePage.ClickCareerButton();
             careersSearchPage.InputProgrammingLanguage(programmingLanguage);
-            careersSearchPage.MoveToLocationDropDownButton(driver);
             careersSearchPage.ClickLocationDropdownButton();
-            careersSearchPage.MoveToLocationDropDownMenu(driver);
             careersSearchPage.ClickAllLocationsOption(location);
-            careersSearchPage.WaitDisplayed(wait,careersSearchPage.GetRemoteCheckbox());
+
+            Assert.That(careersSearchPage.GetSelectedLocation().Text, Does.Contain(location));
+
+            careersSearchPage.WaitCondition(() => careersSearchPage.GetRemoteCheckbox().Displayed);
             careersSearchPage.ClickRemoteCheckbox();
             careersSearchPage.ClickFindButton();
             careersSearchPage.ScrollToViewMoreButton(driver);
-            careersSearchPage.WaitDisplayed(wait, careersSearchPage.GetViewAndApplyButton());
+            careersSearchPage.WaitCondition(() => careersSearchPage.GetViewAndApplyButton().Displayed);
             careersSearchPage.ClickViewAndApplyButton();
             pageSource = driver.PageSource;
 
             Assert.That(pageSource, Does.Contain(programmingLanguage));
-            driver.Quit();
         }
 
         [Test]
         [TestCase("BLOCKCHAIN")]
         [TestCase("Cloud")]
         [TestCase("Automation")]
-        public void ValidateGlobalSearch(string keyword)
+        public void KeywordIsPresentInAllItemsOfList_IsNotPresentInAll_Fail(string keyword)
         {
-            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(10));
             HomePage homePage = new(driver);
 
-            homePage.AcceptCookies(wait);
+            homePage.AcceptCookies();
             homePage.ClickSearchIcon();
-            homePage.WaitDisplayed(wait, homePage.GetSearchTextBox());
+            homePage.WaitCondition(() => homePage.GetSearchTextBox().Displayed);
             homePage.InputSearchKeyword(keyword);
             SearchResultPage searchResultPage = homePage.ClickMainFindButton();
-            searchResultPage.ScrollToFooter(driver); 
+            searchResultPage.ScrollToFooter(driver);             
 
-            Assert.That(searchResultPage.FilterList(keyword), Is.EqualTo(searchResultPage.GetListElements()));
-            driver.Quit();
+            Assert.That(searchResultPage.FilterList(keyword), Is.EqualTo(searchResultPage.GetListElements())
+                , $"Filtered list amount({searchResultPage.FilterList(keyword).Count}) " +
+                $"is not the same as in Total list ({searchResultPage.GetListElements().Count})");
+
+        }
+
+        [Test]
+        [TestCase("EPAM_Corporate_Overview_Q4_EOY.pdf")]
+        public void DownloadButtonDownloadsFile_FileDownloadsCorrectly_Pass(string file)
+        {
+            HomePage homePage = new(driver);
+
+            homePage.AcceptCookies();
+            AboutPage aboutPage =  homePage.ClickAboutButton();
+            aboutPage.ScrollToEpamAtSection(driver);
+            aboutPage.ClickDownloadButton(driver);
+
+            Assert.That(aboutPage.CheckDownload(file), "File isn't downloaded");
+        }
+
+        [Test]
+        public void ValidateArticleTitle() {
+            HomePage homePage = new(driver);
+
+            homePage.AcceptCookies();
         }
     }
 }

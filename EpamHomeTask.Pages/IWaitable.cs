@@ -10,6 +10,6 @@ namespace EpamHomeTask.Pages
 {
     public interface IWaitable
     {
-        bool WaitDisplayed(WebDriverWait wait, IWebElement element);
+        void WaitCondition(Func<bool> condition);
     }
 }

@@ -17,6 +17,7 @@ namespace EpamHomeTask.Pages
         private readonly By locationDropdownButtonLocator = By.CssSelector("span[role=presentation]");
         private readonly By locationDropDownMenuLocator = By.CssSelector("ul[role] .os-content") ;
         private readonly By remoteCheckboxLocator = By.CssSelector("[name=remote]+label");
+        private readonly By selectedLocationLocator = By.CssSelector(".select2-selection__rendered"); 
         private readonly By findButtonLocator = By.XPath("//button[contains(text(), 'Find')]");
         private readonly By viewMoreButtonLocator = By.XPath("//a[.='View More']");
         private readonly By viewAndApplyButtonLocator = By.CssSelector("li.search-result__item:last-child .button-text");
@@ -31,6 +32,7 @@ namespace EpamHomeTask.Pages
         public IWebElement GetLocationDropdownMenu() { return driver.FindElement(locationDropDownMenuLocator); }
         public IWebElement GetRemoteCheckbox() { return driver.FindElement(remoteCheckboxLocator); }
         public IWebElement GetFindButton() { return driver.FindElement(findButtonLocator); }
+        public IWebElement GetSelectedLocation() { return driver.FindElement(selectedLocationLocator); }
         public IWebElement GetViewAndApplyButton() { return driver.FindElement(viewAndApplyButtonLocator); }
         public IWebElement GetViewMoreButton() { return driver.FindElement(viewMoreButtonLocator); }
         public IWebElement GetAllLocationsOption(string option) {
@@ -43,13 +45,11 @@ namespace EpamHomeTask.Pages
             GetLanguageTextBox().SendKeys(language);
         }
 
-        public void ClickLocationDropdownButton()
-        {
-            GetLocationDropdownButton().Click();
-        }
-
         public void ClickAllLocationsOption(string option)
         {
+            MoveToLocationDropdownMenu(driver);
+            IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
+            javaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", GetAllLocationsOption(option));
             GetAllLocationsOption(option).Click();
         }
 
@@ -66,16 +66,23 @@ namespace EpamHomeTask.Pages
 
         public void ClickViewAndApplyButton()
         {
+            MoveToViewAndApplyButton(driver);
             GetViewAndApplyButton().Click();
         }
 
-        public void MoveToLocationDropDownButton(IWebDriver driver)
+        public void ClickLocationDropdownButton()
+        {
+            MoveToLocationDropdownButton(driver);
+            GetLocationDropdownButton().Click();
+        }
+
+        public void MoveToLocationDropdownButton(IWebDriver driver)
         {
             Actions action = new(driver);
             action.MoveToElement(GetLocationDropdownButton());
         }
 
-        public void MoveToLocationDropDownMenu(IWebDriver driver)
+        public void MoveToLocationDropdownMenu(IWebDriver driver)
         {
             Actions action = new(driver);
             action.MoveToElement(GetLocationDropdownMenu());
@@ -87,9 +94,25 @@ namespace EpamHomeTask.Pages
             action.ScrollToElement(GetViewMoreButton());
         }
 
-        public bool WaitDisplayed(WebDriverWait wait, IWebElement element)
+        public void MoveToViewAndApplyButton(IWebDriver driver)
         {
-            return wait.Until(d => element.Displayed);
+            Actions action = new(driver);
+            action.MoveToElement(GetViewAndApplyButton());
+        }
+
+        public void WaitCondition(Func<bool> condition)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
+            try
+            {
+                wait.Until(d => condition());
+            }
+            catch (WebDriverTimeoutException)
+            {
+                Console.WriteLine("Element was not found in time");
+            }
+
         }
 
     }

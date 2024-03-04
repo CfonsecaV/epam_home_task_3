@@ -21,19 +21,29 @@ namespace EpamHomeTask.Pages
         }
 
         public IWebElement GetFooter() { return driver.FindElement(footerLocator); }
-        public IList<IWebElement> GetListElements() { return driver.FindElements(listElementLocator); }
+        public List<IWebElement> GetListElements() { return [.. driver.FindElements(listElementLocator)]; }
 
         public void ScrollToFooter(IWebDriver driver)
         {   
             Actions action = new(driver);
             action.ScrollToElement(GetFooter()).Perform();
         }
-        public bool WaitDisplayed(WebDriverWait wait, IWebElement element)
-        {           
-            return wait.Until(d => element.Displayed);
+        public void WaitCondition(Func<bool> condition)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
+            try
+            {
+                wait.Until(d => condition());
+            }
+            catch (WebDriverTimeoutException)
+            {
+                Console.WriteLine("Element was not found in time");
+            }
+
         }
 
-        public IList<IWebElement> FilterList(string keyword)
+        public List<IWebElement> FilterList(string keyword)
         {
             var filteredElements = GetListElements()
                         .Where(element => element.GetAttribute("href")
