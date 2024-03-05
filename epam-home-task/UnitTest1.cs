@@ -12,7 +12,7 @@ namespace EpamHomeTask.Tests
     public class Tests
     {
         private IWebDriver driver;
-        private string pageSource;
+        private string? pageSource;
 
         [SetUp]
         public void Setup()
@@ -99,10 +99,23 @@ namespace EpamHomeTask.Tests
         }
 
         [Test]
-        public void ValidateArticleTitle() {
+        public void ArticleTitleIsTheSameAsNotedTitle_ItIsTheSame_Pass() { 
             HomePage homePage = new(driver);
+            string? activeTitle;
 
             homePage.AcceptCookies();
+            InsightPage insightPage = homePage.ClickInsightButton();
+            insightPage.SlideSetAmountOfElements(2);            
+            activeTitle = insightPage.SaveActiveElementTitle();
+
+            Assert.That(activeTitle, Does.Contain("From Taming Cloud Complexity"), "Wrong slide element");
+
+            insightPage.ClickActiveReadMoreButton(driver);
+            insightPage.ScrollToArticleTitle(driver);
+
+            Assert.That(activeTitle, Is.EqualTo(insightPage.GetArticleTitle().Text),
+                $"The title ({activeTitle}) is not the same as ({insightPage.GetArticleTitle().Text})");
+
         }
     }
 }

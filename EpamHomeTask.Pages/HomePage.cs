@@ -13,7 +13,7 @@ namespace EpamHomeTask.Pages
         private readonly By acceptCookiesButtonLocator = By.XPath("//button[contains(text(), 'Accept')]");
         private readonly By careersTopMenuLocator = By.XPath("//a[@class='top-navigation__item-link js-op'][.='Careers']");
         private readonly By aboutTopMenuLocator = By.XPath("//a[@class='top-navigation__item-link js-op'][.='About']");
-        private readonly By insightTopMenuLocator = By.XPath("//a[@class='top-navigation__item-link js-op'][.='Insight']");
+        private readonly By insightTopMenuLocator = By.XPath("//a[@class='top-navigation__item-link js-op'][.='Insights']");
         private readonly By searchIconLocator = By.CssSelector("span.search-icon");
         private readonly By searchTextBoxLocator = By.Name("q");
         private readonly By mainFindButtonLocator = By.XPath("//span[contains(text(), 'Find')]");
