@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EpamHomeTask.Pages
 {
-    public class SearchResultPage : IWaitable
+    public class SearchResultPage 
     {
         private IWebDriver driver;
 
@@ -27,21 +27,7 @@ namespace EpamHomeTask.Pages
         {   
             Actions action = new(driver);
             action.ScrollToElement(GetFooter()).Perform();
-        }
-        public void WaitCondition(Func<bool> condition)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
-            try
-            {
-                wait.Until(d => condition());
-            }
-            catch (WebDriverTimeoutException)
-            {
-                Console.WriteLine("Element was not found in time");
-            }
-
-        }
+        }        
 
         public List<IWebElement> FilterList(string keyword)
         {

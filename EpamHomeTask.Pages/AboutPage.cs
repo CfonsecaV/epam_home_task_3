@@ -41,10 +41,10 @@ namespace EpamHomeTask.Pages
             Thread.Sleep(4000);
             string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
             List<string> files = Directory.GetFiles(downloadPath).ToList();             
-            return loopFiles(files,downloadedFile);
+            return LoopFiles(files,downloadedFile);
         }
 
-        private bool loopFiles(List<string> files, string downloadedFile)
+        private bool LoopFiles(List<string> files, string downloadedFile)
         {
             bool isDownloaded = false;
             foreach (string file in files)

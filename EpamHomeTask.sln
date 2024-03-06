@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Tests", "epam-home-task\EpamHomeTask.Tests.csproj", "{76E39BCA-2A37-46FA-B436-FE81613E6686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpamHomeTask.Pages", "EpamHomeTask.Pages\EpamHomeTask.Pages.csproj", "{9C3A2B9B-1922-4A3E-89CB-EDBC41DF0C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Pages", "EpamHomeTask.Pages\EpamHomeTask.Pages.csproj", "{9C3A2B9B-1922-4A3E-89CB-EDBC41DF0C86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

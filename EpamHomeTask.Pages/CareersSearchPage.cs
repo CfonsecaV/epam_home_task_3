@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EpamHomeTask.Pages
 {
-    public class CareersSearchPage : IWaitable
+    public class CareersSearchPage
     {
         private IWebDriver driver;
 
@@ -61,7 +61,8 @@ namespace EpamHomeTask.Pages
 
         public void ClickFindButton()
         {
-            GetFindButton().Click();
+            IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)driver;
+            javaScriptExecutor.ExecuteScript("arguments[0].click();", GetFindButton());
         }
 
         public void ClickViewAndApplyButton()
@@ -98,21 +99,6 @@ namespace EpamHomeTask.Pages
         {
             Actions action = new(driver);
             action.MoveToElement(GetViewAndApplyButton());
-        }
-
-        public void WaitCondition(Func<bool> condition)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
-            try
-            {
-                wait.Until(d => condition());
-            }
-            catch (WebDriverTimeoutException)
-            {
-                Console.WriteLine("Element was not found in time");
-            }
-
         }
 
     }

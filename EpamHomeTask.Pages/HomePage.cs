@@ -6,7 +6,7 @@ using System.Security.AccessControl;
 
 namespace EpamHomeTask.Pages
 {
-    public class HomePage : IWaitable
+    public class HomePage
     {
         private IWebDriver driver;
 
@@ -67,23 +67,9 @@ namespace EpamHomeTask.Pages
 
         public void AcceptCookies()
         {
-            WaitCondition(() => GetAcceptCookiesButton().Enabled && GetAcceptCookiesButton().Displayed);
+            GeneralMethods.WaitCondition(driver, () => GetAcceptCookiesButton().Enabled && GetAcceptCookiesButton().Displayed);
             GetAcceptCookiesButton().Click();
         }
 
-        public void WaitCondition(Func<bool> condition)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
-            try
-            {
-                wait.Until(d => condition());
-            }
-            catch (WebDriverTimeoutException)
-            {
-                Console.WriteLine("Element was not found in time");
-            }
-
-        }
     }
 }

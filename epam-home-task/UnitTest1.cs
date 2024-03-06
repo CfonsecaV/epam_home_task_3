@@ -52,11 +52,11 @@ namespace EpamHomeTask.Tests
 
             Assert.That(careersSearchPage.GetSelectedLocation().Text, Does.Contain(location));
 
-            careersSearchPage.WaitCondition(() => careersSearchPage.GetRemoteCheckbox().Displayed);
+            GeneralMethods.WaitCondition(driver, () => careersSearchPage.GetRemoteCheckbox().Displayed);
             careersSearchPage.ClickRemoteCheckbox();
             careersSearchPage.ClickFindButton();
             careersSearchPage.ScrollToViewMoreButton(driver);
-            careersSearchPage.WaitCondition(() => careersSearchPage.GetViewAndApplyButton().Displayed);
+            GeneralMethods.WaitCondition(driver, () => careersSearchPage.GetViewAndApplyButton().Displayed);
             careersSearchPage.ClickViewAndApplyButton();
             pageSource = driver.PageSource;
 
@@ -73,7 +73,7 @@ namespace EpamHomeTask.Tests
 
             homePage.AcceptCookies();
             homePage.ClickSearchIcon();
-            homePage.WaitCondition(() => homePage.GetSearchTextBox().Displayed);
+            GeneralMethods.WaitCondition(driver, () => homePage.GetSearchTextBox().Displayed);
             homePage.InputSearchKeyword(keyword);
             SearchResultPage searchResultPage = homePage.ClickMainFindButton();
             searchResultPage.ScrollToFooter(driver);             
