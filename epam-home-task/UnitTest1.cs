@@ -10,6 +10,7 @@ namespace EpamHomeTask.Tests
         public void Setup()
         {
             BrowserFactory.InitBrowser("Chrome");
+            BrowserFactory.LoadApplication();
         }
 
         [TearDown]

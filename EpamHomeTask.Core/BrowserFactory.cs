@@ -9,12 +9,13 @@ namespace EpamHomeTask.Core
     public class BrowserFactory
     {
         private static readonly IDictionary<string, IWebDriver> Drivers = new Dictionary<string, IWebDriver>();
+        private static bool isDriverInitialized = false;
         private static IWebDriver? driver;
 
         public static IWebDriver Driver
         {
             get {
-                if (driver == null) 
+                if (isDriverInitialized && driver == null) 
                 {
                     throw new NullReferenceException("The WebDriver browser instance was not initialized. " +
                         "You should first call the method InitBrowser.");
@@ -35,6 +36,7 @@ namespace EpamHomeTask.Core
                         options.AddArgument("--start-maximized");
                         driver = new FirefoxDriver(options);
                         Drivers.Add("Firefox", driver);
+                        isDriverInitialized = true;
                     }
                     break;
 
@@ -45,6 +47,7 @@ namespace EpamHomeTask.Core
                         options.AddArgument("--start-maximized");
                         driver = new ChromeDriver(options);
                         Drivers.Add("Chrome", driver);
+                        isDriverInitialized = true;
                     }
                     break;
 
@@ -55,6 +58,7 @@ namespace EpamHomeTask.Core
                         options.AddArgument("--start-maximized");
                         driver = new EdgeDriver(options);
                         Drivers.Add("Edge", driver);
+                        isDriverInitialized = true;
                     }
                     break;
             }
