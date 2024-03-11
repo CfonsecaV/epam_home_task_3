@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Tests", "epam-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Business", "EpamHomeTask.Pages\EpamHomeTask.Business.csproj", "{9C3A2B9B-1922-4A3E-89CB-EDBC41DF0C86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpamHomeTask.Core", "EpamHomeTask.Core\EpamHomeTask.Core.csproj", "{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Core", "EpamHomeTask.Core\EpamHomeTask.Core.csproj", "{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,6 +4,7 @@ using EpamHomeTask.Business.Data;
 using EpamHomeTask.Core;
 using log4net;
 using log4net.Config;
+using NUnit.Framework.Interfaces;
 
 namespace EpamHomeTask.Tests
 {
@@ -26,6 +27,10 @@ namespace EpamHomeTask.Tests
         [TearDown]
         public void TearDown()
         {
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
+            {
+                ScreenshotMaker.TakeBrowserScreenshot();
+            }
             Log.Info("Closing browser...");
             BrowserFactory.CloseAllDrivers();
         }
@@ -69,7 +74,7 @@ namespace EpamHomeTask.Tests
             HomePageContext homePage = HomePageContext.Open();
 
             homePage.AcceptCookies();
-            homePage.ClickSearchIcon();            
+            homePage.ClickSearchIcon();
             homePage.InputSearchKeyword(keyword);
             SearchResultPageContext searchResultPage = homePage.ClickMainFindButton();
             searchResultPage.ScrollToFooter();
@@ -92,9 +97,10 @@ namespace EpamHomeTask.Tests
             AboutPageContext aboutPage = homePage.ClickAboutButton();
             aboutPage.ScrollToEpamAtSection();
             aboutPage.ClickDownloadButton();
-
+            
             Log.Info("Downloading file...");
             Assert.That(aboutPage.CheckDownload(file), "File isn't downloaded");
+            ScreenshotMaker.TakeBrowserScreenshot();
 
             Log.Info($"Correctly downloaded file '{file}'");
         }
