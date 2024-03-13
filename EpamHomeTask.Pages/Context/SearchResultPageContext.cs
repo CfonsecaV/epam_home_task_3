@@ -1,4 +1,4 @@
-﻿using EpamHomeTask.Business.AplicationInterface;
+﻿using EpamHomeTask.Business.Pages;
 using EpamHomeTask.Core;
 using OpenQA.Selenium;
 using System;
@@ -11,16 +11,21 @@ namespace EpamHomeTask.Business.Business
 {
     public class SearchResultPageContext
     {
-        SearchResultPage page = new();
+        SearchResultPage _page;
+
+        public SearchResultPageContext(IWebDriver webDriver)
+        {
+            _page = new SearchResultPage(webDriver);
+        }
 
         public List<IWebElement> GetListElements()
         {
-            return page.ListElements;
+            return _page.ListElements;
         }
-        public void ScrollToFooter() => BrowserHelper.GetAction().ScrollToElement(page.Footer).Perform();
+        public void ScrollToFooter() => BrowserHelper.GetAction(_page.Driver).ScrollToElement(_page.Footer).Perform();
         public List<IWebElement> FilterList(string keyword)
         {
-            var filteredElements = page.ListElements
+            var filteredElements = _page.ListElements
                         .Where(element => element.GetAttribute("href")
                         .Contains(keyword, StringComparison.OrdinalIgnoreCase))
                         .ToList();

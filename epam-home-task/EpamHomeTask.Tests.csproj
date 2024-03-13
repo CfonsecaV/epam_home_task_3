@@ -37,10 +37,4 @@
     <ProjectReference Include="..\EpamHomeTask.Pages\EpamHomeTask.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="AppSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

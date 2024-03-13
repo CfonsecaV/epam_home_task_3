@@ -8,63 +8,54 @@ namespace EpamHomeTask.Core
 {
     public class BrowserFactory
     {
-        private static readonly IDictionary<string, IWebDriver> Drivers = new Dictionary<string, IWebDriver>();
-        private static bool isDriverInitialized = false;
-        private static IWebDriver? driver;
-
-        public static IWebDriver Driver
+        private readonly IWebDriver? _webDriver;
+        public BrowserFactory(Browsers browser)
         {
-            get {
-                if (isDriverInitialized && driver == null) 
-                {
-                    throw new NullReferenceException("The WebDriver browser instance was not initialized. " +
-                        "You should first call the method InitBrowser.");
-                }
-                return driver;
-            }
-            private set { driver = value; }
+            InitBrowser(browser);
         }
-        
-        public static void InitBrowser(string browserName)
+
+        public IWebDriver InitBrowser(Browsers browser)
         {
-            switch (browserName)
+            var webDriver = browser switch
             {
-                case "Firefox":
-                    if(Driver == null)
-                    {
-                        FirefoxOptions options = new();
-                        options.AddArgument("--start-maximized");
-                        driver = new FirefoxDriver(options);
-                        Drivers.Add("Firefox", driver);
-                        isDriverInitialized = true;
-                    }
-                    break;
-
-                case "Chrome":
-                    if (Driver == null)
-                    {
-                        ChromeOptions options = new();
-                        options.AddArgument("--start-maximized");
-                        driver = new ChromeDriver(options);
-                        Drivers.Add("Chrome", driver);
-                        isDriverInitialized = true;
-                    }
-                    break;
-
-                case "Edge":
-                    if (Driver == null)
-                    {
-                        EdgeOptions options = new();
-                        options.AddArgument("--start-maximized");
-                        driver = new EdgeDriver(options);
-                        Drivers.Add("Edge", driver);
-                        isDriverInitialized = true;
-                    }
-                    break;
-            }
+                Browsers.Chrome => InitChromeDriver(),
+                Browsers.Firefox => InitFirefoxDriver(),
+                Browsers.Edge => InitEdgeDriver(),
+                _ => throw new ArgumentOutOfRangeException(nameof(browser))
+            };
+            return webDriver;
         }
-        public static string LoadApplication()
+        public IWebDriver InitChromeDriver()
         {
+            ChromeOptions options = new();
+            options.AddArgument("--start-maximized");
+            var webdriver = new ChromeDriver(options);
+            return webdriver;
+        }
+        public IWebDriver InitFirefoxDriver()
+        {
+            FirefoxOptions options = new();
+            options.AddArgument("--start-maximized");
+            var webdriver = new FirefoxDriver(options);
+            return webdriver;
+        }
+        public IWebDriver InitEdgeDriver()
+        {
+            EdgeOptions options = new();
+            options.AddArgument("--start-maximized");
+            var webDriver = new EdgeDriver(options);
+            return webDriver;
+        }
+        public IWebDriver GetInstanceOf()
+        {
+            if(_webDriver == null)
+            {
+                throw new InvalidOperationException("WebDriver hasn't been initialized");
+            }
+            return _webDriver;
+        } 
+        public static string LoadApplication()
+        {   
             var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("AppSettings.json");
@@ -72,14 +63,15 @@ namespace EpamHomeTask.Core
             string baseUrl = configuration["BaseUrl"] ?? string.Empty;
             return baseUrl;
         }
-
-        public static void CloseAllDrivers()
+        public static void CloseAllDrivers(IWebDriver webDriver)
         {
-            foreach (var key in Drivers.Keys) 
+            if (webDriver == null)
             {
-                Drivers[key].Close();
-                Drivers[key].Quit();
+                throw new InvalidOperationException("WebDriver hasn't been initialized");
             }
+            webDriver.Close();
+            webDriver.Quit();
+            webDriver.Dispose();
         }
     }
 }

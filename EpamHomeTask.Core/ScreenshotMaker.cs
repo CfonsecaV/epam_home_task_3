@@ -1,5 +1,5 @@
-﻿using OpenQA.Selenium.Support.Extensions;
-using System.Drawing;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.Extensions;
 using System.Drawing.Imaging;
 
 namespace EpamHomeTask.Core
@@ -14,10 +14,10 @@ namespace EpamHomeTask.Core
         {
             get { return ImageFormat.Jpeg; }
         }
-        public static string TakeBrowserScreenshot()
+        public static string TakeBrowserScreenshot(IWebDriver webDriver)
         {
             var screenshotPath = Path.Combine(Environment.CurrentDirectory, "Display" + NewScreenshotName);
-            var image = BrowserFactory.Driver.TakeScreenshot();
+            var image = webDriver.TakeScreenshot();
             image.SaveAsFile(screenshotPath);
             return screenshotPath;
         }

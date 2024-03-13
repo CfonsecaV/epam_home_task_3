@@ -1,17 +1,23 @@
-﻿using EpamHomeTask.Business.AplicationInterface;
+﻿using EpamHomeTask.Business.Pages;
 using EpamHomeTask.Core;
+using OpenQA.Selenium;
 
 namespace EpamHomeTask.Business.Business
 {
     public class AboutPageContext
     {
-        private AboutPage page = new();
+        private AboutPage _page;
 
-        public void ScrollToEpamAtSection() => BrowserHelper.GetAction().ScrollToElement(page.EpamAtSection);
+        public AboutPageContext(IWebDriver webDriver) 
+        {
+            _page = new AboutPage(webDriver);
+        }
+
+        public void ScrollToEpamAtSection() => BrowserHelper.GetAction(_page.Driver).ScrollToElement(_page.EpamAtSection);
         public void ClickDownloadButton()
         {
-            BrowserHelper.GetAction().MoveToElement(page.DownloadButton);
-            page.DownloadButton.Click();
+            BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.DownloadButton);
+            _page.DownloadButton.Click();
         }
         public bool CheckDownload(string downloadedFile)
         {

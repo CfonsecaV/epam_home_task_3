@@ -10,10 +10,10 @@ using OpenQA.Selenium.Interactions;
 namespace EpamHomeTask.Core
 {
     public class BrowserHelper
-    {
-        public static void WaitCondition(Func<bool> condition)
+    {       
+        public static void WaitCondition(IWebDriver webDriver ,Func<bool> condition)
         {
-            WebDriverWait wait = new(BrowserFactory.Driver, TimeSpan.FromSeconds(10));
+            WebDriverWait wait = new(webDriver, TimeSpan.FromSeconds(10));
             wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
             try
             {
@@ -25,15 +25,15 @@ namespace EpamHomeTask.Core
             }
 
         }
-        public static Actions GetAction()
+        public static Actions GetAction(IWebDriver webDriver)
         {
-            Actions action = new(BrowserFactory.Driver);
+            Actions action = new(webDriver);
             return action;
         }
 
-        public static string GetPageSource()
+        public static string GetPageSource(IWebDriver webDriver)
         {
-            string pageSource = BrowserFactory.Driver.PageSource;
+            string pageSource = webDriver.PageSource;
             return pageSource;
         }
     }

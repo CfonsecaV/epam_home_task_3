@@ -1,17 +1,12 @@
 ﻿using EpamHomeTask.Core;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EpamHomeTask.Business.AplicationInterface
+namespace EpamHomeTask.Business.Pages
 {
     public class CareersSearchPage
     {
+        private readonly IWebDriver _webDriver;
+
         private readonly By languageTextBoxLocator = By.Id("new_form_job_search-keyword");
         private readonly By locationDropdownButtonLocator = By.CssSelector("span[role=presentation]");
         private readonly By locationDropDownMenuLocator = By.CssSelector("ul[role] .os-content");
@@ -21,16 +16,19 @@ namespace EpamHomeTask.Business.AplicationInterface
         private readonly By viewMoreButtonLocator = By.XPath("//a[.='View More']");
         private readonly By viewAndApplyButtonLocator = By.CssSelector("li.search-result__item:last-child .button-text");
         private string allLocationsOptionLocator = "li[title='{0}']";
-        public CareersSearchPage() { }
-
-        public IWebElement LanguageTextBox => BrowserFactory.Driver.FindElement(languageTextBoxLocator);
-        public IWebElement LocationDropdownButton => BrowserFactory.Driver.FindElement(locationDropdownButtonLocator);
-        public IWebElement LocationDropdownMenu => BrowserFactory.Driver.FindElement(locationDropDownMenuLocator);
-        public IWebElement RemoteCheckbox => BrowserFactory.Driver.FindElement(remoteCheckboxLocator);
-        public IWebElement FindButton => BrowserFactory.Driver.FindElement(findButtonLocator);
-        public IWebElement SelectedLocation => BrowserFactory.Driver.FindElement(selectedLocationLocator);
-        public IWebElement ViewAndApplyButton => BrowserFactory.Driver.FindElement(viewAndApplyButtonLocator);
-        public IWebElement ViewMoreButton => BrowserFactory.Driver.FindElement(viewMoreButtonLocator);
+        public CareersSearchPage(IWebDriver webDriver) 
+        {
+            _webDriver = webDriver;
+        }
+        public IWebDriver Driver => _webDriver;
+        public IWebElement LanguageTextBox => _webDriver.FindElement(languageTextBoxLocator);
+        public IWebElement LocationDropdownButton => _webDriver.FindElement(locationDropdownButtonLocator);
+        public IWebElement LocationDropdownMenu => _webDriver.FindElement(locationDropDownMenuLocator);
+        public IWebElement RemoteCheckbox => _webDriver.FindElement(remoteCheckboxLocator);
+        public IWebElement FindButton => _webDriver.FindElement(findButtonLocator);
+        public IWebElement SelectedLocation => _webDriver.FindElement(selectedLocationLocator);
+        public IWebElement ViewAndApplyButton => _webDriver.FindElement(viewAndApplyButtonLocator);
+        public IWebElement ViewMoreButton => _webDriver.FindElement(viewMoreButtonLocator);
         public IWebElement GetAllLocationsOption(string option)
         {
             allLocationsOptionLocator = string.Format(allLocationsOptionLocator, option);

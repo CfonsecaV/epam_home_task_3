@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Validations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EpamHomeTask.Core\EpamHomeTask.Core.csproj" />
   </ItemGroup>
 

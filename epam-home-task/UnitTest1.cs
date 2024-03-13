@@ -1,15 +1,17 @@
 using NUnit.Framework;
 using EpamHomeTask.Business.Business;
-using EpamHomeTask.Business.Data;
 using EpamHomeTask.Core;
 using log4net;
 using log4net.Config;
 using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
 
 namespace EpamHomeTask.Tests
 {
     public class Tests
-    {     
+    {   
+        private IWebDriver _driver;
+        private HomePageContext _homeContext;
         protected ILog Log
         {
             get { return LogManager.GetLogger(this.GetType()); }
@@ -19,9 +21,11 @@ namespace EpamHomeTask.Tests
         public void Setup()
         {
             XmlConfigurator.Configure(new FileInfo("Log.config"));
-            Log.Info($"Initializing '{Data.BrowserTypes[0]}' Browser...");
-            BrowserFactory.InitBrowser(Data.BrowserTypes[0].ToString());
-            BrowserFactory.LoadApplication();
+            Log.Info($"Initializing '{Browsers.Chrome}' Browser...");
+            BrowserFactory factory = new(Browsers.Chrome);
+            _driver = factory.GetInstanceOf();
+            _homeContext = new(_driver);
+            _homeContext.Open();
         }
 
         [TearDown]
@@ -29,10 +33,10 @@ namespace EpamHomeTask.Tests
         {
             if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
             {
-                ScreenshotMaker.TakeBrowserScreenshot();
+                ScreenshotMaker.TakeBrowserScreenshot(_driver);
             }
             Log.Info("Closing browser...");
-            BrowserFactory.CloseAllDrivers();
+            BrowserFactory.CloseAllDrivers(_driver);
         }
 
         [Test]
@@ -41,11 +45,9 @@ namespace EpamHomeTask.Tests
         [TestCase("Python", "All Locations")]
         public void PageContainsInputProgrammingLanguage_DoesContainIt_Pass(string programmingLanguage, string location)
         {
-            HomePageContext homePage = HomePageContext.Open();
-
-            homePage.AcceptCookies();
-            CareerSearchPageContext careerSearchPage = homePage.ClickCareerButton();
-            careerSearchPage.InputProgrammingLanguage(programmingLanguage);
+            _homeContext.AcceptCookies();
+            CareerSearchPageContext careerSearchPage = _homeContext.ClickCareerButton();
+            careerSearchPage.InputProgrammingLanguage(programmingLanguage); 
             careerSearchPage.ClickLocationDropdownButton();
             careerSearchPage.ClickAllLocationsOption(location);
 
@@ -60,7 +62,7 @@ namespace EpamHomeTask.Tests
             careerSearchPage.ClickViewAndApplyButton();
 
             Log.Info($"Checking if page source contains '{programmingLanguage}'...");
-            Assert.That(BrowserHelper.GetPageSource(), Does.Contain(programmingLanguage));
+            Assert.That(BrowserHelper.GetPageSource(_driver), Does.Contain(programmingLanguage));
 
             Log.Info($"Page source contains '{programmingLanguage}'");
         }
@@ -71,12 +73,10 @@ namespace EpamHomeTask.Tests
         [TestCase("Automation")]
         public void KeywordIsPresentInAllItemsOfList_IsNotPresentInAll_Fail(string keyword)
         {
-            HomePageContext homePage = HomePageContext.Open();
-
-            homePage.AcceptCookies();
-            homePage.ClickSearchIcon();
-            homePage.InputSearchKeyword(keyword);
-            SearchResultPageContext searchResultPage = homePage.ClickMainFindButton();
+            _homeContext.AcceptCookies();
+            _homeContext.ClickSearchIcon();
+            _homeContext.InputSearchKeyword(keyword);
+            SearchResultPageContext searchResultPage = _homeContext.ClickMainFindButton();
             searchResultPage.ScrollToFooter();
 
             Log.Info($"Checking if all elements on the list contain '{keyword}'...");
@@ -91,27 +91,25 @@ namespace EpamHomeTask.Tests
         [TestCase("EPAM_Corporate_Overview_Q4_EOY.pdf")]
         public void DownloadButtonDownloadsFile_FileDownloadsCorrectly_Pass(string file)
         {
-            HomePageContext homePage = HomePageContext.Open();
-
-            homePage.AcceptCookies();
-            AboutPageContext aboutPage = homePage.ClickAboutButton();
+            _homeContext.AcceptCookies();
+            AboutPageContext aboutPage = _homeContext.ClickAboutButton();
             aboutPage.ScrollToEpamAtSection();
             aboutPage.ClickDownloadButton();
             
             Log.Info("Downloading file...");
             Assert.That(aboutPage.CheckDownload(file), "File isn't downloaded");
-            ScreenshotMaker.TakeBrowserScreenshot();
+            ScreenshotMaker.TakeBrowserScreenshot(_driver);
 
             Log.Info($"Correctly downloaded file '{file}'");
         }
 
         [Test]
-        public void ArticleTitleIsTheSameAsNotedTitle_ItIsTheSame_Pass() { 
-            HomePageContext home = HomePageContext.Open();
+        public void ArticleTitleIsTheSameAsNotedTitle_ItIsTheSame_Pass() 
+        { 
             string? activeTitle;
 
-            home.AcceptCookies();
-            InsightPageContext insight = home.ClickInsightButton();
+            _homeContext.AcceptCookies();
+            InsightPageContext insight = _homeContext.ClickInsightButton();
             insight.SlideSetAmountOfElements(2);            
             activeTitle = insight.SaveActiveElementTitle();
 
