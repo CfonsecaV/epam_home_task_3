@@ -11,7 +11,7 @@ namespace EpamHomeTask.Core
         private readonly IWebDriver? _webDriver;
         public BrowserFactory(Browsers browser)
         {
-            InitBrowser(browser);
+            _webDriver = InitBrowser(browser);
         }
 
         public IWebDriver InitBrowser(Browsers browser)
