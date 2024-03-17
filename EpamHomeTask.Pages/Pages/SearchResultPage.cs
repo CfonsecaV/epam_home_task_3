@@ -15,6 +15,6 @@ namespace EpamHomeTask.Business.Pages
         }
         public IWebDriver Driver => _webDriver;
         public IWebElement Footer => _webDriver.FindElement(footerLocator);
-        public List<IWebElement> ListElements => [.. _webDriver.FindElements(listElementLocator)];        
+        public List<IWebElement> ListElements => _webDriver.FindElements(listElementLocator).ToList();        
     }
 }

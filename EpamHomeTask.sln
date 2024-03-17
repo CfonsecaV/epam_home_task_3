@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Business", "Ep
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpamHomeTask.Core", "EpamHomeTask.Core\EpamHomeTask.Core.csproj", "{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlowProject.Specs", "SpecFlowProject.Specs\SpecFlowProject.Specs.csproj", "{3E973B21-0DAC-4DA8-B0C4-F5F6C516D608}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE4F9F8B-EEF1-4CC2-876A-F66EA3B05B04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E973B21-0DAC-4DA8-B0C4-F5F6C516D608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E973B21-0DAC-4DA8-B0C4-F5F6C516D608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E973B21-0DAC-4DA8-B0C4-F5F6C516D608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E973B21-0DAC-4DA8-B0C4-F5F6C516D608}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
