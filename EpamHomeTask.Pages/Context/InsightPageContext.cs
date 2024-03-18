@@ -2,7 +2,7 @@
 using EpamHomeTask.Core;
 using OpenQA.Selenium;
 
-namespace EpamHomeTask.Business.Business
+namespace EpamHomeTask.Business.Context
 {
     public class InsightPageContext
     {

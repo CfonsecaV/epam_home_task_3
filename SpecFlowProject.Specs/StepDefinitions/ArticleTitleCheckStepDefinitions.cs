@@ -1,7 +1,5 @@
-using System;
-using TechTalk.SpecFlow;
 using OpenQA.Selenium;
-using EpamHomeTask.Business.Business;
+using EpamHomeTask.Business.Context;
 using EpamHomeTask.Core;
 using NUnit.Framework;
 
@@ -16,9 +14,9 @@ namespace SpecFlowProject.Specs.StepDefinitions
         private HomePageContext? _homeContext;
         string? _activeTitle;
 
-        [BeforeScenario] public void BeforeScenario()
+        [BeforeScenario("EPAM")] public void BeforeScenario()
         {
-            BrowserFactory factory = new(Browsers.Chrome);
+            BrowserFactory factory = new(Browsers.Edge);
             _driver = factory.GetInstanceOf();
             _homeContext = new(_driver);
         }
@@ -58,7 +56,7 @@ namespace SpecFlowProject.Specs.StepDefinitions
                 $"The title ({_activeTitle}) is not the same as ({_insight?.GetArticleTitle()})");
         }
 
-        [AfterScenario] public void AfterScenario()
+        [AfterScenario("EPAM")] public void AfterScenario()
         {
             BrowserFactory.CloseAllDrivers(_driver);
         }

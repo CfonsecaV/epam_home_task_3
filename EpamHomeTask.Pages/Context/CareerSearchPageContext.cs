@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using EpamHomeTask.Core;
 
-namespace EpamHomeTask.Business.Business
+namespace EpamHomeTask.Business.Context
 {
     public class CareerSearchPageContext
     {
