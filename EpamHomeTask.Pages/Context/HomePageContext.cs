@@ -37,6 +37,7 @@ namespace EpamHomeTask.Business.Context
         }
         public InsightPageContext ClickInsightButton()
         {
+            BrowserHelper.WaitCondition(_page.Driver, () => _page.InsightTopMenu.Enabled);
             _page.InsightTopMenu.Click();
             return new InsightPageContext(_page.Driver);
         }
