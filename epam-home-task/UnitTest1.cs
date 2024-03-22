@@ -20,9 +20,10 @@ namespace EpamHomeTask.Tests
         [SetUp]
         public void Setup()
         {
+            var browser = TestContext.Parameters.Get("BROWSER");
             XmlConfigurator.Configure(new FileInfo("Log.config"));
-            Log.Info($"Initializing '{Browsers.Chrome}' Browser...");
-            BrowserFactory factory = new(Browsers.Chrome);
+            Log.Info($"Initializing '{browser}' Browser...");
+            BrowserFactory factory = new(Enum.Parse<Browsers>(browser, true));
             _driver = factory.GetInstanceOf();
             _homeContext = new(_driver);
             _homeContext.Open();

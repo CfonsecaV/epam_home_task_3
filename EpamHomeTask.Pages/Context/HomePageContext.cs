@@ -27,11 +27,13 @@ namespace EpamHomeTask.Business.Context
         }
         public CareerSearchPageContext ClickCareerButton()
         {
+            BrowserHelper.WaitCondition(_page.Driver, () => _page.CareersTopMenu.Enabled);
             _page.CareersTopMenu.Click();
             return new CareerSearchPageContext(_page.Driver);
         }
         public AboutPageContext ClickAboutButton()
         {
+            BrowserHelper.WaitCondition(_page.Driver, () => _page.AboutTopMenu.Enabled);
             _page.AboutTopMenu.Click();
             return new AboutPageContext(_page.Driver);
         }

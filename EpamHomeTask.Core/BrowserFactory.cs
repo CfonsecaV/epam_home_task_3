@@ -28,21 +28,24 @@ namespace EpamHomeTask.Core
         public IWebDriver InitChromeDriver()
         {
             ChromeOptions options = new();
-            options.AddArgument("--start-maximized");
+            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--headless");
             var webdriver = new ChromeDriver(options);
             return webdriver;
         }
         public IWebDriver InitFirefoxDriver()
         {
             FirefoxOptions options = new();
-            options.AddArgument("--start-maximized");
+            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--headless");
             var webdriver = new FirefoxDriver(options);
             return webdriver;
         }
         public IWebDriver InitEdgeDriver()
         {
             EdgeOptions options = new();
-            options.AddArgument("--start-maximized");
+            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--headless");
             var webDriver = new EdgeDriver(options);
             return webDriver;
         }
