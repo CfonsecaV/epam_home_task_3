@@ -23,6 +23,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Debug'
+  BrowserType: ${{parameters.BrowserType}}
 
 steps:
 - task: NuGetToolInstaller@1
@@ -42,5 +43,7 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    testAssemblyVer2: '**\*test*.dll'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
     runSettingsFile: 'epam-home-task/Tests.runsettings'
     overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
