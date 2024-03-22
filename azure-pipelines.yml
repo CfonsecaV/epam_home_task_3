@@ -9,6 +9,16 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+parameters:
+  - name: BrowserType
+    displayName: 'BrowserType'
+    type: string
+    default: 'Chrome'
+    values:
+      - Chrome
+      - Firefox
+      - Edge
+
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
