@@ -32,3 +32,5 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    runSettingsFile: 'epam-home-task/Tests.runsettings'
+    overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
