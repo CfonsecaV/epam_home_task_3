@@ -43,7 +43,17 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    testAssemblyVer2: '**\*test*.dll'
+    testFiltercriteria: 'FullyQualifiedName~APITests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: 'epam-home-task/Tests.runsettings'
+    overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
+  continueOnError: true
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testFiltercriteria: 'FullyQualifiedName~UnitTest1'
     searchFolder: '$(System.DefaultWorkingDirectory)'
     runSettingsFile: 'epam-home-task/Tests.runsettings'
     overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
