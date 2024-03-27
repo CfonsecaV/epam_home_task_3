@@ -75,8 +75,10 @@ steps:
     testResultsFormat: VSTest
     testResultsFiles: '**/*.trx'
     searchFolder: '$(System.DefaultWorkingDirectory)'
+  condition: always()
 
 - task: PublishBuildArtifacts@1
   inputs:
    PathtoPublish: '$(build.artifactStagingDirectory)'
    ArtifactName: 'artifacts'
+  condition: always()
