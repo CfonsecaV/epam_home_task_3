@@ -53,7 +53,7 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    testFiltercriteria: 'FullyQualifiedName~UnitTest1'
+    testFiltercriteria: 'FullyQualifiedName~SeleniumTests'
     searchFolder: '$(System.DefaultWorkingDirectory)'
     runSettingsFile: 'epam-home-task/Tests.runsettings'
     overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
