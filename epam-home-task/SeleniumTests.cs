@@ -8,7 +8,7 @@ using OpenQA.Selenium;
 
 namespace EpamHomeTask.Tests
 {
-    public class Tests
+    public class SeleniumTests
     {   
         private IWebDriver _driver;
         private HomePageContext _homeContext;
