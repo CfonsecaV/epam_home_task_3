@@ -9,41 +9,65 @@ namespace EpamHomeTask.Core
     public class BrowserFactory
     {
         private readonly IWebDriver? _webDriver;
-        public BrowserFactory(Browsers browser)
+        public BrowserFactory(Browsers browser, string downloadPath = "")
         {
-            _webDriver = InitBrowser(browser);
+            _webDriver = InitBrowser(browser, downloadPath);
         }
 
-        public IWebDriver InitBrowser(Browsers browser)
+        public IWebDriver InitBrowser(Browsers browser, string downloadPath)
         {
             var webDriver = browser switch
             {
-                Browsers.Chrome => InitChromeDriver(),
-                Browsers.Firefox => InitFirefoxDriver(),
-                Browsers.Edge => InitEdgeDriver(),
+                Browsers.Chrome => InitChromeDriver(downloadPath),
+                Browsers.Firefox => InitFirefoxDriver(downloadPath),
+                Browsers.Edge => InitEdgeDriver(downloadPath),
                 _ => throw new ArgumentOutOfRangeException(nameof(browser))
             };
             return webDriver;
         }
-        public IWebDriver InitChromeDriver()
+        public IWebDriver InitChromeDriver(string downloadPath = "")
         {
             ChromeOptions options = new();
+            if (!string.IsNullOrEmpty(downloadPath))
+            {
+                options.AddUserProfilePreference("download.default_directory", downloadPath);
+                options.AddUserProfilePreference("download.prompt_for_download", false);
+                options.AddUserProfilePreference("download.directory_upgrade", true);
+                options.AddUserProfilePreference("safebrowsing.enabled", true);
+            }
             options.AddArgument("--window-size=1920,1080");
             options.AddArgument("--headless");
             var webdriver = new ChromeDriver(options);
             return webdriver;
         }
-        public IWebDriver InitFirefoxDriver()
+        public IWebDriver InitFirefoxDriver(string downloadPath = "")
         {
             FirefoxOptions options = new();
+            if (!string.IsNullOrEmpty(downloadPath))
+            {
+                FirefoxProfile profile = new FirefoxProfile();
+                profile.SetPreference("browser.download.dir", downloadPath);
+                profile.SetPreference("browser.download.folder", 2);
+                profile.SetPreference("browser.download.useDownloadDir", true);
+                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk"
+                        , "application/pdf,text/plain,application/octet-stream");
+                profile.SetPreference("pdfjs.disabled", true);
+            }
             options.AddArgument("--window-size=1920,1080");
-            options.AddArgument("--headless");
+            options.AddArgument("--headless");            
             var webdriver = new FirefoxDriver(options);
             return webdriver;
         }
-        public IWebDriver InitEdgeDriver()
+        public IWebDriver InitEdgeDriver(string downloadPath = "")
         {
-            EdgeOptions options = new();
+            EdgeOptions options = new();            
+            if (!string.IsNullOrEmpty(downloadPath))
+            {
+                options.AddUserProfilePreference("download.default_directory", downloadPath);
+                options.AddUserProfilePreference("download.prompt_for_download", false);
+                options.AddUserProfilePreference("download.directory_upgrade", true);
+                options.AddUserProfilePreference("safebrowsing.enabled", true);
+            }
             options.AddArgument("--window-size=1920,1080");
             options.AddArgument("--headless");
             var webDriver = new EdgeDriver(options);

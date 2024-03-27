@@ -3,5 +3,6 @@
 <RunSettings>
 	<TestRunParameters>
 		<Parameter name ="BROWSER" value="Chrome"/>
+		<Parameter name ="CUSTOM_DOWNLOAD_PATH" value="$(System.DefaultWorkingDirectory)\Downloads"/>
 	</TestRunParameters>
 </RunSettings>

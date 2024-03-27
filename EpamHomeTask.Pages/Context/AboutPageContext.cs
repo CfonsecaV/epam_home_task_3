@@ -19,10 +19,9 @@ namespace EpamHomeTask.Business.Context
             BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.DownloadButton);
             _page.DownloadButton.Click();
         }
-        public bool CheckDownload(string downloadedFile)
+        public bool CheckDownload(string downloadedFile, string downloadPath)
         {
             Thread.Sleep(4000);
-            string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
             List<string> files = Directory.GetFiles(downloadPath).ToList();
             return LoopFiles(files, downloadedFile);
         }

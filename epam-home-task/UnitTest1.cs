@@ -12,6 +12,7 @@ namespace EpamHomeTask.Tests
     {   
         private IWebDriver _driver;
         private HomePageContext _homeContext;
+        private string _downloadPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
         protected ILog Log
         {
             get { return LogManager.GetLogger(this.GetType()); }
@@ -23,7 +24,7 @@ namespace EpamHomeTask.Tests
             var browser = TestContext.Parameters.Get("BROWSER");
             XmlConfigurator.Configure(new FileInfo("Log.config"));
             Log.Info($"Initializing '{browser}' Browser...");
-            BrowserFactory factory = new(Enum.Parse<Browsers>(browser, true));
+            BrowserFactory factory = new(Enum.Parse<Browsers>(browser, true), _downloadPath);
             _driver = factory.GetInstanceOf();
             _homeContext = new(_driver);
             _homeContext.Open();
@@ -98,7 +99,12 @@ namespace EpamHomeTask.Tests
             aboutPage.ClickDownloadButton();
             
             Log.Info("Downloading file...");
-            Assert.That(aboutPage.CheckDownload(file), "File isn't downloaded");
+            if(!Directory.Exists(_downloadPath))
+            {
+                Directory.CreateDirectory(_downloadPath);
+            }
+
+            Assert.That(aboutPage.CheckDownload(file, _downloadPath), "File isn't downloaded");
             ScreenshotMaker.TakeBrowserScreenshot(_driver);
 
             Log.Info($"Correctly downloaded file '{file}'");
