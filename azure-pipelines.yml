@@ -6,6 +6,18 @@
 trigger:
 - master
 
+pr:
+ branches:
+   include:
+     - '*'
+
+schedules:
+  - cron: "0 0 * * *"
+    displayName: Daily midnight build
+    branches:
+       include:
+         - master
+
 pool:
   vmImage: 'windows-latest'
 
@@ -57,3 +69,14 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
     runSettingsFile: 'epam-home-task/Tests.runsettings'
     overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+   PathtoPublish: '$(build.artifactStagingDirectory)'
+   ArtifactName: 'artifacts'
