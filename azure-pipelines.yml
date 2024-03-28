@@ -70,15 +70,15 @@ steps:
     runSettingsFile: 'epam-home-task/Tests.runsettings'
     overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
 
-- task: PublishTestResults@2
+
+- task: PublishBuildArtifacts@1
   inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '**/*.trx'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
+   PathtoPublish: '$(System.DefaultWorkingDirectory)\Logs'
+   ArtifactName: 'Logs'
   condition: always()
 
 - task: PublishBuildArtifacts@1
   inputs:
-   PathtoPublish: '$(build.artifactStagingDirectory)'
-   ArtifactName: 'artifacts'
+   PathtoPublish: '$(build.artifactStagingDirectory)\Screenshots'
+   ArtifactName: 'Screenshots'
   condition: always()
