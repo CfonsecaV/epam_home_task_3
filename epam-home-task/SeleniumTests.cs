@@ -13,6 +13,7 @@ namespace EpamHomeTask.Tests
         private IWebDriver _driver;
         private HomePageContext _homeContext;
         private string _downloadPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+        private string _screenshotPath = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots");
         protected ILog Log
         {
             get { return LogManager.GetLogger(this.GetType()); }
@@ -35,6 +36,10 @@ namespace EpamHomeTask.Tests
         {
             if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
             {
+                if (!Directory.Exists(_screenshotPath))
+                {
+                    Directory.CreateDirectory(_screenshotPath);
+                }
                 ScreenshotMaker.TakeBrowserScreenshot(_driver);
             }
             Log.Info("Closing browser...");
