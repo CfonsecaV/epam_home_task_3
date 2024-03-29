@@ -2,7 +2,7 @@
 <!-- File name extension must be .runsettings -->
 <RunSettings>
 	<TestRunParameters>
-		<Parameter name ="BROWSER" value="Chrome"/>
+		<Parameter name ="BROWSER" value="Firefox"/>
 		<Parameter name ="CUSTOM_DOWNLOAD_PATH" value="$(System.DefaultWorkingDirectory)\Downloads"/>
 	</TestRunParameters>
 </RunSettings>

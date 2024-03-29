@@ -45,15 +45,19 @@ namespace EpamHomeTask.Core
             FirefoxOptions options = new();
             if (!string.IsNullOrEmpty(downloadPath))
             {
-                FirefoxProfile profile = new FirefoxProfile();
+                FirefoxProfile profile = new();
                 profile.SetPreference("browser.download.dir", downloadPath);
-                profile.SetPreference("browser.download.folder", 2);
+                profile.SetPreference("browser.download.folderList", 2);
                 profile.SetPreference("browser.download.useDownloadDir", true);
-                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk"
-                        , "application/pdf,text/plain,application/octet-stream");
-                profile.SetPreference("pdfjs.disabled", true);
+                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
+                        "application/pdf,text/plain,application/octet-stream");
+                profile.SetPreference("pdfjs.disabled", false);
+                profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
+                options.Profile = profile;
+
             }
-            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--width=1920");
+            options.AddArgument("--height=1080");
             options.AddArgument("--headless");            
             var webdriver = new FirefoxDriver(options);
             return webdriver;
