@@ -73,12 +73,12 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-   TargetPath: :'$(System.DefaultWorkingDirectory)/bin/Debug/net6.0/Logs'
-   ArtifactName: 'Logs'
+   TargetPath: $(System.DefaultWorkingDirectory)/bin/Debug/net6.0/Logs
+   ArtifactName: Logs
   condition: always()
 
 - task: PublishBuildArtifacts@1
   inputs:
-   TargetPath: :'$(System.DefaultWorkingDirectory)/bin/Screenshots'
+   TargetPath: '$(System.DefaultWorkingDirectory)/bin/Screenshots'
    ArtifactName: 'Screenshots'
   condition: always()
