@@ -110,7 +110,6 @@ namespace EpamHomeTask.Tests
             }
 
             Assert.That(aboutPage.CheckDownload(file, _downloadPath), "File isn't downloaded");
-            ScreenshotMaker.TakeBrowserScreenshot(_driver);
 
             Log.Info($"Correctly downloaded file '{file}'");
         }
