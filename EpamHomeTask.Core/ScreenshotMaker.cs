@@ -16,7 +16,7 @@ namespace EpamHomeTask.Core
         }
         public static string TakeBrowserScreenshot(IWebDriver webDriver)
         {
-            var screenshotPath = Path.Combine(Environment.CurrentDirectory, "Display" + NewScreenshotName);
+            var screenshotPath = Path.Combine(Environment.CurrentDirectory, "Screenshots", "Display" + NewScreenshotName);
             var image = webDriver.TakeScreenshot();
             image.SaveAsFile(screenshotPath);
             return screenshotPath;

@@ -8,10 +8,12 @@ using OpenQA.Selenium;
 
 namespace EpamHomeTask.Tests
 {
-    public class Tests
+    public class SeleniumTests
     {   
         private IWebDriver _driver;
         private HomePageContext _homeContext;
+        private string _downloadPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+        private string _screenshotPath = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots");
         protected ILog Log
         {
             get { return LogManager.GetLogger(this.GetType()); }
@@ -20,9 +22,10 @@ namespace EpamHomeTask.Tests
         [SetUp]
         public void Setup()
         {
+            var browser = TestContext.Parameters.Get("BROWSER");
             XmlConfigurator.Configure(new FileInfo("Log.config"));
-            Log.Info($"Initializing '{Browsers.Chrome}' Browser...");
-            BrowserFactory factory = new(Browsers.Chrome);
+            Log.Info($"Initializing '{browser}' Browser...");
+            BrowserFactory factory = new(Enum.Parse<Browsers>(browser, true), _downloadPath);
             _driver = factory.GetInstanceOf();
             _homeContext = new(_driver);
             _homeContext.Open();
@@ -33,6 +36,10 @@ namespace EpamHomeTask.Tests
         {
             if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
             {
+                if (!Directory.Exists(_screenshotPath))
+                {
+                    Directory.CreateDirectory(_screenshotPath);
+                }
                 ScreenshotMaker.TakeBrowserScreenshot(_driver);
             }
             Log.Info("Closing browser...");
@@ -97,8 +104,12 @@ namespace EpamHomeTask.Tests
             aboutPage.ClickDownloadButton();
             
             Log.Info("Downloading file...");
-            Assert.That(aboutPage.CheckDownload(file), "File isn't downloaded");
-            ScreenshotMaker.TakeBrowserScreenshot(_driver);
+            if(!Directory.Exists(_downloadPath))
+            {
+                Directory.CreateDirectory(_downloadPath);
+            }
+
+            Assert.That(aboutPage.CheckDownload(file, _downloadPath), "File isn't downloaded");
 
             Log.Info($"Correctly downloaded file '{file}'");
         }

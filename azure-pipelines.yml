@@ -1,0 +1,98 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pr:
+ branches:
+   include:
+     - '*'
+
+schedules:
+  - cron: "0 0 * * *"
+    displayName: Daily midnight build
+    branches:
+       include:
+         - master
+
+pool:
+  vmImage: 'windows-latest'
+
+parameters:
+  - name: BrowserType
+    displayName: 'BrowserType'
+    type: string
+    default: 'Chrome'
+    values:
+      - Chrome
+      - Firefox
+      - Edge
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Debug'
+  BrowserType: ${{parameters.BrowserType}}
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PowerShell@2
+  displayName: 'Create Logs Folder'
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -ItemType Directory -Path $(System.DefaultWorkingDirectory)\Logs
+
+- task: PowerShell@2
+  displayName: 'Create Screenshots Folder'
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -ItemType Directory -Path $(System.DefaultWorkingDirectory)\Screenshots
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testFiltercriteria: 'FullyQualifiedName~APITests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: 'epam-home-task/Tests.runsettings'
+    overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
+  continueOnError: true
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testFiltercriteria: 'FullyQualifiedName~SeleniumTests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: 'epam-home-task/Tests.runsettings'
+    overrideTestrunParameters: '-BROWSER "$(BrowserType)"'
+
+
+- task: PublishBuildArtifacts@1
+  inputs:
+   TargetPath: $(System.DefaultWorkingDirectory)\Logs
+   ArtifactName: Logs
+  condition: always()
+
+- task: PublishBuildArtifacts@1
+  inputs:
+   TargetPath: $(System.DefaultWorkingDirectory)\Screenshots
+   ArtifactName: Screenshots
+  condition: always()

@@ -17,12 +17,12 @@ namespace EpamHomeTask.Business.Context
         public void ClickDownloadButton()
         {
             BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.DownloadButton);
-            _page.DownloadButton.Click();
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)_page.Driver;
+            jse.ExecuteScript("arguments[0].click();", _page.DownloadButton);
         }
-        public bool CheckDownload(string downloadedFile)
+        public bool CheckDownload(string downloadedFile, string downloadPath)
         {
             Thread.Sleep(4000);
-            string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
             List<string> files = Directory.GetFiles(downloadPath).ToList();
             return LoopFiles(files, downloadedFile);
         }

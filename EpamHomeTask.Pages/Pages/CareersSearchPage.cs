@@ -13,7 +13,7 @@ namespace EpamHomeTask.Business.Pages
         private readonly By remoteCheckboxLocator = By.CssSelector("[name=remote]+label");
         private readonly By selectedLocationLocator = By.CssSelector(".select2-selection__rendered");
         private readonly By findButtonLocator = By.XPath("//button[contains(text(), 'Find')]");
-        private readonly By viewMoreButtonLocator = By.XPath("//a[.='View More']");
+        private readonly By viewMoreButtonLocator = By.CssSelector("a[href='#' i]");
         private readonly By viewAndApplyButtonLocator = By.CssSelector("li.search-result__item:last-child .button-text");
         private string allLocationsOptionLocator = "li[title='{0}']";
         public CareersSearchPage(IWebDriver webDriver) 

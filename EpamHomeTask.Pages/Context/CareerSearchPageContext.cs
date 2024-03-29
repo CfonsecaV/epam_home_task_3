@@ -16,7 +16,6 @@ namespace EpamHomeTask.Business.Context
         public void InputProgrammingLanguage(string language) => _page.LanguageTextBox.SendKeys(language);
         public void MoveToLocationDropdownButton() => BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.LocationDropdownButton);
         public void MoveToLocationDropdownMenu() => BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.LocationDropdownMenu);
-        public void ScrollToViewMoreButton() => BrowserHelper.GetAction(_page.Driver).ScrollToElement(_page.ViewMoreButton);
         public void MoveToViewAndApplyButton() => BrowserHelper.GetAction(_page.Driver).MoveToElement(_page.ViewAndApplyButton);
         public string GetSelectedLocationText() => _page.SelectedLocation.Text;
         public void ClickLocationDropdownButton()
@@ -47,6 +46,13 @@ namespace EpamHomeTask.Business.Context
             IJavaScriptExecutor jse = (IJavaScriptExecutor)_page.Driver;
             jse.ExecuteScript("arguments[0].scrollIntoView(true);", _page.GetAllLocationsOption(option));
             _page.GetAllLocationsOption(option).Click();
+        }
+        public void ScrollToViewMoreButton()
+        {
+            BrowserHelper.WaitCondition(_page.Driver, () => _page.ViewMoreButton.Displayed);
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)_page.Driver;
+            jse.ExecuteScript("arguments[0].scrollIntoView(true);", _page.ViewMoreButton);
+            //BrowserHelper.GetAction(_page.Driver).ScrollToElement(_page.ViewMoreButton);
         }
     }
 }
